@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card Wars - Content Locker</title>
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap"
-        rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --jake-yellow: #e9a900;
@@ -32,6 +27,9 @@
             --night-sky-blue: #0f172a;
             --medium-blue: #1c2541;
             --card-border: #5d3a8c;
+            --old-paper: #f7e9c8;
+            --old-paper-border: #c9b38b;
+            --ink-color: #3a2618;
         }
 
         * {
@@ -57,12 +55,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            position: relative;
         }
 
         .locker-container {
@@ -88,7 +81,6 @@
             text-shadow: 5px 5px 0 var(--marceline-purple);
             margin-bottom: 15px;
             letter-spacing: 3px;
-            font-family: "Walter Turncoat", cursive;
         }
 
         .locker-subtitle {
@@ -96,7 +88,6 @@
             color: var(--text-color);
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            font-family: "Walter Turncoat", cursive;
         }
 
         .step-card {
@@ -117,25 +108,10 @@
             border-color: var(--pb-pink);
         }
 
-        .step-number {
-            background: var(--jake-yellow);
-            color: var(--dark-purple);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-
         .step-title {
             color: var(--jake-yellow);
             font-size: 1.4rem;
             margin-bottom: 10px;
-            font-family: "Walter Turncoat", cursive;
         }
 
         .step-description {
@@ -143,7 +119,6 @@
             color: #ccd6f6;
         }
 
-        /* Center flex wrapper for the button */
         .center-flex {
             display: flex;
             justify-content: center;
@@ -152,131 +127,539 @@
             margin: 20px 0;
         }
 
-        /* Success Message */
-        .success-message {
-            display: none;
-            background: rgba(38, 166, 154, 0.3);
-            border: 3px solid var(--bmo-teal);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .success-message i {
-            font-size: 3rem;
-            color: var(--bmo-teal);
-            margin-bottom: 15px;
-        }
-
-        .success-message h3 {
-            font-size: 2.5rem;
-            color: var(--bmo-teal);
-            margin-bottom: 15px;
-            font-family: "Walter Turncoat", cursive;
-        }
-
-        .success-message p {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-        }
-
-        .download-link {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--jake-yellow), var(--bmo-teal));
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 1.8rem;
+        .locker-footer {
             margin-top: 20px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--jake-yellow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .support-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--marceline-purple);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
             font-family: "Walter Turncoat", cursive;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .support-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(114, 34, 181, 0.5);
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 360px;
+            background-color: var(--old-paper);
+            border: 4px solid var(--old-paper-border);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            transform-origin: bottom right;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .chat-header {
+            background: var(--dark-purple);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--old-paper-border);
+        }
+
+        .chat-header h2 {
+            color: var(--jake-yellow);
+            font-size: 1.7rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            font-family: "Walter Turncoat", cursive;
+            letter-spacing: 1px;
+        }
+
+        .close-chat {
+            background: transparent;
+            border: none;
+            color: var(--old-paper);
+            font-size: 1.5rem;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .download-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        .close-chat:hover {
+            transform: rotate(90deg) scale(1.1);
+            color: var(--jake-yellow);
+        }
+
+        .chat-body {
+            height: 350px;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scroll-behavior: smooth;
+            background: repeating-linear-gradient(
+                var(--old-paper),
+                var(--old-paper) 24px,
+                rgba(0,0,0,0.1) 25px
+            );
+            position: relative;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 18px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+            font-family: "Walter Turncoat", cursive;
+            color: var(--ink-color);
+            border: 2px solid var(--old-paper-border);
+            position: relative;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot-message {
+            background: var(--old-paper);
+            border-radius: 0 15px 15px 15px;
+            color: var(--ink-color);
+            align-self: flex-start;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
+        }
+
+        .bot-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10px;
+            border-width: 0 10px 10px 0;
+            border-style: solid;
+            border-color: transparent var(--old-paper-border) transparent transparent;
+        }
+
+        .user-message {
+            background: var(--old-paper);
+            border-radius: 15px 0 15px 15px;
+            color: var(--ink-color);
+            align-self: flex-end;
+            box-shadow: -3px 3px 5px rgba(0,0,0,0.1);
+        }
+
+        .user-message::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10px;
+            border-width: 0 0 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent transparent var(--old-paper-border);
+        }
+
+        .quick-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            animation: fadeIn 0.5s 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .quick-question {
+            background: transparent;
+            color: var(--ink-color);
+            border: 2px solid var(--old-paper-border);
+            border-radius: 15px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            font-family: "Walter Turncoat", cursive;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            position: relative;
+            box-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+        }
+
+        .quick-question:hover {
+            background: rgba(201, 179, 139, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .reward-badge {
+            background: var(--flame-princess-red);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            transform: rotate(5deg);
+            box-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+        }
+
+        .offer-button {
+            display: inline-block;
+            background: var(--jake-yellow);
+            color: var(--dark-purple);
+            padding: 10px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 15px;
+            font-family: "Walter Turncoat", cursive;
+            border: none;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .offer-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(233, 169, 0, 0.4);
+            background: var(--primary-color);
+        }
+
+        .chat-footer {
+            padding: 15px;
+            border-top: 3px solid var(--old-paper-border);
+            background: var(--dark-purple);
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: 2px solid var(--card-border);
+            background: var(--old-paper);
+            color: var(--ink-color);
+            font-family: "Walter Turncoat", cursive;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .chat-input input:focus {
+           outline: none;
+           border-color: var(--jake-yellow);
+        }
+
+        .chat-input button {
+            background: var(--jake-yellow);
+            color: var(--dark-purple);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .chat-input button:hover {
+            background: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 18px;
+            background: var(--old-paper);
+            border-radius: 0 15px 15px 15px;
+            align-self: flex-start;
+            border: 2px solid var(--old-paper-border);
+            color: var(--ink-color);
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
+        }
+        
+        .typing-indicator .dot {
+            height: 8px;
+            width: 8px;
+            background-color: var(--ink-color);
+            display: block;
+            border-radius: 50%;
+            animation: typing 1.2s infinite ease-in-out;
+            opacity: 0.7;
+        }
+        
+        .typing-indicator .dot:nth-of-type(2) { animation-delay: 0.2s; }
+        .typing-indicator .dot:nth-of-type(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        .card-wars-stamp {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: var(--marceline-purple);
+            font-weight: bold;
+            opacity: 0.6;
+            transform: rotate(-5deg);
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .locker-container {
-                padding: 20px;
-            }
-
-            .locker-title {
-                font-size: 2.5rem;
-            }
-
-            .locker-subtitle {
-                font-size: 1.4rem;
-            }
-
-            .step-card {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-
         @media (max-width: 480px) {
-            .locker-title {
-                font-size: 2rem;
+            .locker-title { font-size: 2.5rem; }
+            .locker-subtitle { font-size: 1.4rem; }
+            .chat-container {
+                width: calc(100vw - 20px);
+                height: calc(100vh - 90px);
+                bottom: 80px;
+                right: 10px;
+                left: 10px;
             }
-
-            .locker-subtitle {
-                font-size: 1.2rem;
-            }
-
-            .step-title {
-                font-size: 1.2rem;
-            }
+            .chat-body { height: 100%; }
         }
     </style>
-    <script type="text/javascript">
-        var QHUKQ_Gek_hmwcac={"it":4524914,"key":"66b87"};
-    </script>
-    <script src="https://dlk457skl57zp.cloudfront.net/df31e8e.js"></script>
+	<script type="text/javascript">
+    var QqGBP_yuq_uHJyBc = { "it": 4524914, "key": "66b87" };
+</script>
+<script src="https://dlk457skl57zp.cloudfront.net/0dbb8dc.js"></script>
+
 </head>
 <body>
     <div class="locker-container">
         <div class="locker-header">
             <h1 class="locker-title">CONTENT LOCKED!</h1>
-            <p class="locker-subtitle">
-                Complete a simple task to unlock the Card Wars download
-            </p>
+            <p class="locker-subtitle">Complete a simple task to unlock the Card Wars download</p>
         </div>
 
         <div class="center-flex">
-            <div class="step-card" id="verifyButton" onclick="onVerifyClick()">
+           <div class="step-card" id="verifyButton" onclick="showVerifyingAndLaunchLocker()">
+
                 <h3 class="step-title">Verify</h3>
                 <p class="step-description">Prove you're not a robot</p>
             </div>
         </div>
 
         <div class="locker-footer">
-            <p>Loading... 0 of 1 Offers Completed</p>
+            <div class="loading-spinner"></div>
+            <p>0 of 1 Offers Completed</p>
+        </div>
+    </div>
+    
+    <button class="support-button" id="supportButton">
+        <i class="fas fa-comments"></i>
+        <span>Need help?</span>
+    </button>
+    
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h2>Card Wars Support</h2>
+            <button class="close-chat" id="closeChat"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <!-- Chat content will be added dynamically -->
+        </div>
+        <div class="chat-footer">
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Type a message...">
+                <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
 
     <script>
-        function onVerifyClick() {
-            const verifyButton = document.getElementById("verifyButton");
+        // --- ELEMENT REFERENCES ---
+        const chatContainer = document.getElementById('chatContainer');
+        const supportButton = document.getElementById('supportButton');
+        const closeChat = document.getElementById('closeChat');
+        const chatBody = document.getElementById('chatBody');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
 
-            verifyButton.style.pointerEvents = "none";
-            verifyButton.style.opacity = "0.6";
-            verifyButton.innerHTML =
-                '<i class="fas fa-spinner fa-spin"></i> VERIFYING...';
+        // --- CONTENT LOCKER SCRIPT ---
+function showVerifyingAndLaunchLocker() {
+    const verifyButton = document.getElementById("verifyButton");
+    verifyButton.style.pointerEvents = "none";
+    verifyButton.innerHTML = '<i class="fas fa-spinner fa-spin fa-2x"></i><br><p style="margin-top:10px;">Verifying... Please wait</p>';
 
-            if (typeof _bu === "function") {
-                _bu();  // استدعاء الدالة الخارجية من السكريبت الخارجي
-            } else {
-                console.error("_bu() function not found!");
+    setTimeout(() => {
+        _Mz(); // Trigger the locker
+    }, 1000);
+}
+
+        // --- CHAT LOGIC ---
+        const quickQuestionData = [
+            { 
+                text: "How does the content locker work?", 
+                response: "The content locker requires you to complete a simple offer to unlock the Card Wars download. It's designed to prevent bots and ensure only real users get access.", 
+                offer: false 
+            },
+            { 
+                text: "Which offer is the easiest?", 
+                badge: "RECOMMENDED", 
+                response: "The 'Tap to claim your reward!' offer is the easiest! Just answer a few quick questions and you'll unlock the game in no time.", 
+                offer: true 
+            },
+            { 
+                text: "Why do I need to complete an offer?", 
+                response: "Completing an offer helps us verify you're a real player and not a bot. It also supports the developers who created this awesome game!", 
+                offer: false 
+            },
+            { 
+                text: "I'm having trouble with the offer", 
+                response: "No worries! Try clearing your browser cache or using a different browser. If that doesn't work, our 'Tap to claim your reward!' offer is the most reliable.", 
+                offer: true 
             }
+        ];
+
+        function startChat() {
+            chatBody.innerHTML = '';
+            setTimeout(() => {
+                addMessage('bot', "Hey there, adventurer! I'm Finn, your Card Wars assistant. What brings you to the support cave today?");
+                setTimeout(showQuickQuestions, 1000);
+            }, 500);
         }
+
+        function addMessage(sender, text, offer = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.innerHTML = text;
+            
+            if (offer) {
+                const offerButton = document.createElement('a');
+                offerButton.href = "https://smrturl.co/42b3a17";
+                offerButton.className = 'offer-button';
+                offerButton.textContent = 'Tap to claim your reward!';
+                offerButton.target = '_blank'; // Opens in a new tab
+                messageDiv.appendChild(offerButton);
+            }
+            
+            chatBody.appendChild(messageDiv);
+            
+            // Add Card Wars stamp to the chat
+            const stamp = document.createElement('div');
+            stamp.className = 'card-wars-stamp';
+            stamp.textContent = 'CARD WARS SUPPORT';
+            chatBody.appendChild(stamp);
+            
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showQuickQuestions() {
+            const quickQuestionsDiv = document.createElement('div');
+            quickQuestionsDiv.className = 'quick-questions';
+            
+            quickQuestionData.forEach(q => {
+                const button = document.createElement('button');
+                button.className = 'quick-question';
+                button.innerHTML = q.text;
+                if (q.badge) {
+                    button.innerHTML += `<span class="reward-badge">${q.badge}</span>`;
+                }
+                button.onclick = () => handleQuickQuestion(q, quickQuestionsDiv);
+                quickQuestionsDiv.appendChild(button);
+            });
+            
+            chatBody.appendChild(quickQuestionsDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function handleQuickQuestion(question, container) {
+            addMessage('user', question.text);
+            container.remove();
+            showTypingIndicator(question.response, question.offer);
+        }
+
+        function showTypingIndicator(responseText, includeOffer) {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div> Finn is typing...';
+            chatBody.appendChild(typingDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            setTimeout(() => {
+                typingDiv.remove();
+                addMessage('bot', responseText, includeOffer);
+                setTimeout(showQuickQuestions, 1000);
+            }, 2000);
+        }
+
+        function handleUserSend() {
+            const text = userInput.value.trim();
+            if (!text) return;
+            addMessage('user', text);
+            userInput.value = '';
+            
+            // Generic response for typed messages
+            const genericResponse = "For the best help, try one of the quick questions above! If you're stuck, ask about the easiest offer - it only takes a minute!";
+            showTypingIndicator(genericResponse, true);
+        }
+
+        // --- EVENT LISTENERS ---
+        supportButton.addEventListener('click', () => {
+            chatContainer.style.display = 'flex';
+            supportButton.style.display = 'none';
+            startChat();
+        });
+        
+        closeChat.addEventListener('click', () => {
+            chatContainer.style.display = 'none';
+            supportButton.style.display = 'flex';
+        });
+
+        sendButton.addEventListener('click', handleUserSend);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUserSend();
+        });
     </script>
 </body>
 </html>
