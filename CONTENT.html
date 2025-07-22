@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Wars - Content Locker</title>
+    <title>Card Wars - Dynamic Content Locker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap" rel="stylesheet">
     
@@ -53,7 +53,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 20px;
             position: relative;
         }
@@ -69,6 +68,7 @@
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
             text-align: center;
             z-index: 100;
+            margin-top: 60px;
         }
 
         .locker-header {
@@ -90,41 +90,76 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
-        .step-card {
-            background: linear-gradient(135deg, var(--dark-blue), var(--dark-purple));
-            border-radius: 15px;
-            padding: 20px;
-            width: 200px;
-            border: 3px solid var(--jake-yellow);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            margin: 0 auto;
-        }
-
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
-            border-color: var(--pb-pink);
-        }
-
-        .step-title {
-            color: var(--jake-yellow);
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-
-        .step-description {
-            font-size: 1rem;
-            color: #ccd6f6;
-        }
-
         .center-flex {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
             margin: 20px 0;
+        }
+
+        /* DYNAMIC VERIFY BUTTON */
+        .verify-container {
+            position: relative;
+            display: inline-block;
+            perspective: 500px;
+        }
+
+        .verify-button {
+            background: linear-gradient(135deg, 
+                var(--jake-yellow) 0%, 
+                var(--primary-color) 50%, 
+                var(--jake-yellow) 100%);
+            background-size: 200% 200%;
+            border-radius: 15px;
+            padding: 20px;
+            width: 220px;
+            border: 3px solid var(--jake-yellow);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(233, 169, 0, 0.6);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite, gradientShift 4s infinite linear;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+        }
+
+        .verify-button:hover {
+            transform: translateY(-5px) scale(1.05) rotateX(5deg);
+            box-shadow: 
+                0 12px 25px rgba(0, 0, 0, 0.5),
+                0 0 25px rgba(233, 169, 0, 0.8);
+            border-color: var(--pb-pink);
+            animation-play-state: paused;
+        }
+
+        .verify-button:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 
+                0 4px 10px rgba(0, 0, 0, 0.3),
+                0 0 10px rgba(233, 169, 0, 0.4);
+        }
+
+        .step-title {
+            color: var(--dark-purple);
+            font-size: 1.7rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-description {
+            font-size: 1.1rem;
+            color: var(--dark-purple);
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 2;
         }
 
         .locker-footer {
@@ -149,10 +184,22 @@
             to { transform: rotate(360deg); }
         }
 
+        @keyframes pulse {
+            0% { box-shadow: 0 8px 20px rgba(0,0,0,0.4), 0 0 15px rgba(233, 169, 0, 0.6); }
+            50% { box-shadow: 0 8px 20px rgba(0,0,0,0.4), 0 0 25px rgba(233, 169, 0, 0.8); }
+            100% { box-shadow: 0 8px 20px rgba(0,0,0,0.4), 0 0 15px rgba(233, 169, 0, 0.6); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .support-button {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            top: 20px;
+            right: 20px;
             background: var(--marceline-purple);
             color: white;
             border: none;
@@ -176,8 +223,8 @@
 
         .chat-container {
             position: fixed;
-            bottom: 100px;
-            right: 30px;
+            top: 80px;
+            right: 20px;
             width: 360px;
             background-color: var(--old-paper);
             border: 4px solid var(--old-paper-border);
@@ -187,7 +234,7 @@
             display: none;
             flex-direction: column;
             overflow: hidden;
-            transform-origin: bottom right;
+            transform-origin: top right;
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
@@ -454,39 +501,141 @@
             transform: rotate(-5deg);
         }
 
+        /* Particle effects */
+        .particle {
+            position: absolute;
+            background: var(--jake-yellow);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: particleFloat linear forwards;
+        }
+
+        @keyframes particleFloat {
+            to {
+                transform: translate(var(--tx), var(--ty)) rotate(var(--r));
+                opacity: 0;
+            }
+        }
+
         /* Responsive Design */
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             .locker-container {
-                padding: 25px 15px; /* Reduced padding */
+                padding: 30px 20px;
+                margin-top: 80px;
             }
-            .locker-title { font-size: 2.5rem; }
-            .locker-subtitle { font-size: 1.4rem; }
+            
+            .locker-title {
+                font-size: 2.8rem;
+                text-shadow: 3px 3px 0 var(--marceline-purple);
+            }
+            
+            .locker-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .verify-button {
+                width: 200px;
+                padding: 18px;
+            }
+            
+            .step-title {
+                font-size: 1.5rem;
+            }
+            
+            .step-description {
+                font-size: 1rem;
+            }
+            
             .chat-container {
-                width: calc(100vw - 20px);
-                height: calc(100vh - 90px);
-                bottom: 80px;
-                right: 10px;
-                left: 10px;
+                width: calc(100vw - 40px);
+                max-width: 360px;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-50%);
             }
-            .chat-body { height: 100%; }
+            
+            .chat-body {
+                height: 300px;
+            }
+            
             .support-button {
-                bottom: 85px; /* Moved up to be visible on mobile */
-                right: 20px;
-                transform: scale(0.9); /* Slightly smaller for mobile */
+                font-size: 1.1rem;
+                padding: 12px 20px;
+                top: 15px;
+                right: 15px;
             }
-            .support-button:hover {
-                /* Disable hover effect on mobile for a better UX */
-                transform: scale(0.9);
+        }
+
+        @media (max-width: 480px) {
+            .locker-title { 
+                font-size: 2.2rem;
+                letter-spacing: 1px;
+            }
+            
+            .locker-subtitle { 
+                font-size: 1.2rem;
+                line-height: 1.4;
+            }
+            
+            .locker-container {
+                padding: 25px 15px;
+                margin-top: 70px;
+            }
+            
+            .verify-button {
+                width: 180px;
+                padding: 15px;
+            }
+            
+            .step-title {
+                font-size: 1.3rem;
+            }
+            
+            .step-description {
+                font-size: 0.9rem;
+            }
+            
+            .locker-footer {
+                font-size: 1rem;
+            }
+            
+            .support-button {
+                font-size: 1rem;
+                padding: 10px 16px;
+            }
+            
+            .chat-container {
+                width: calc(100vw - 30px);
+                top: 65px;
+            }
+            
+            .chat-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .chat-body {
+                height: 280px;
+                padding: 15px;
+            }
+            
+            .message {
+                font-size: 1rem;
+                padding: 10px 15px;
             }
         }
     </style>
-	<script type="text/javascript">
-    var QqGBP_yuq_uHJyBc = { "it": 4524914, "key": "66b87" };
-</script>
-<script src="https://dlk457skl57zp.cloudfront.net/0dbb8dc.js"></script>
-
+    <script type="text/javascript">
+        var QqGBP_yuq_uHJyBc = { "it": 4524914, "key": "66b87" };
+    </script>
+    <script src="https://dlk457skl57zp.cloudfront.net/0dbb8dc.js"></script>
 </head>
 <body>
+    <button class="support-button" id="supportButton">
+        <i class="fas fa-comments"></i>
+        <span>Need help?</span>
+    </button>
+    
     <div class="locker-container">
         <div class="locker-header">
             <h1 class="locker-title">CONTENT LOCKED!</h1>
@@ -494,10 +643,11 @@
         </div>
 
         <div class="center-flex">
-           <div class="step-card" id="verifyButton" onclick="showVerifyingAndLaunchLocker()">
-
-                <h3 class="step-title">Verify</h3>
-                <p class="step-description">Prove you're not a robot</p>
+           <div class="verify-container">
+                <div class="verify-button" id="verifyButton">
+                    <h3 class="step-title">VERIFY NOW</h3>
+                    <p class="step-description">Prove you're not a robot</p>
+                </div>
             </div>
         </div>
 
@@ -507,18 +657,14 @@
         </div>
     </div>
     
-    <button class="support-button" id="supportButton">
-        <i class="fas fa-comments"></i>
-        <span>Need help?</span>
-    </button>
-    
     <div class="chat-container" id="chatContainer">
         <div class="chat-header">
             <h2>CHAT WITH BMO</h2>
             <button class="close-chat" id="closeChat"><i class="fas fa-times"></i></button>
         </div>
         <div class="chat-body" id="chatBody">
-            </div>
+            <!-- Chat content will be added dynamically -->
+        </div>
         <div class="chat-footer">
             <div class="chat-input">
                 <input type="text" id="userInput" placeholder="Type a message...">
@@ -535,17 +681,64 @@
         const chatBody = document.getElementById('chatBody');
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
+        const verifyButton = document.getElementById('verifyButton');
+
+        // --- PARTICLE EFFECT FOR VERIFY BUTTON ---
+        function createParticles(e) {
+            const rect = verifyButton.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                
+                // Randomize particle movement
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 100 + 50;
+                const tx = Math.cos(angle) * speed;
+                const ty = Math.sin(angle) * speed;
+                const rotation = Math.random() * 360;
+                
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.setProperty('--r', `${rotation}deg`);
+                
+                particle.style.opacity = '1';
+                particle.style.backgroundColor = `hsl(${Math.random() * 60 + 30}, 100%, 50%)`;
+                
+                verifyButton.appendChild(particle);
+                
+                // Remove particle after animation completes
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
 
         // --- CONTENT LOCKER SCRIPT ---
-function showVerifyingAndLaunchLocker() {
-    const verifyButton = document.getElementById("verifyButton");
-    verifyButton.style.pointerEvents = "none";
-    verifyButton.innerHTML = '<i class="fas fa-spinner fa-spin fa-2x"></i><br><p style="margin-top:10px;">Verifying... Please wait</p>';
-
-    setTimeout(() => {
-        _Mz(); // Trigger the locker
-    }, 1000);
-}
+        function showVerifyingAndLaunchLocker() {
+            // Add click effect
+            verifyButton.innerHTML = `
+                <div class="verifying-overlay">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top:10px;">Verifying...</p>
+                </div>
+            `;
+            
+            // Add pulsing effect
+            verifyButton.style.animation = "pulse 0.5s infinite";
+            
+            setTimeout(() => {
+                // Trigger the locker
+                _Mz();
+            }, 1500);
+        }
 
         // --- CHAT LOGIC ---
         const quickQuestionData = [
@@ -671,6 +864,9 @@ function showVerifyingAndLaunchLocker() {
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleUserSend();
         });
+        
+        verifyButton.addEventListener('click', showVerifyingAndLaunchLocker);
+        verifyButton.addEventListener('mousemove', createParticles);
     </script>
 </body>
 </html>
