@@ -456,6 +456,9 @@
 
         /* Responsive Design */
         @media (max-width: 480px) {
+            .locker-container {
+                padding: 25px 15px; /* Reduced padding */
+            }
             .locker-title { font-size: 2.5rem; }
             .locker-subtitle { font-size: 1.4rem; }
             .chat-container {
@@ -466,6 +469,15 @@
                 left: 10px;
             }
             .chat-body { height: 100%; }
+            .support-button {
+                bottom: 85px; /* Moved up to be visible on mobile */
+                right: 20px;
+                transform: scale(0.9); /* Slightly smaller for mobile */
+            }
+            .support-button:hover {
+                /* Disable hover effect on mobile for a better UX */
+                transform: scale(0.9);
+            }
         }
     </style>
 	<script type="text/javascript">
@@ -502,12 +514,11 @@
     
     <div class="chat-container" id="chatContainer">
         <div class="chat-header">
-            <h2>Card Wars Support</h2>
+            <h2>CHAT WITH BMO</h2>
             <button class="close-chat" id="closeChat"><i class="fas fa-times"></i></button>
         </div>
         <div class="chat-body" id="chatBody">
-            <!-- Chat content will be added dynamically -->
-        </div>
+            </div>
         <div class="chat-footer">
             <div class="chat-input">
                 <input type="text" id="userInput" placeholder="Type a message...">
@@ -564,7 +575,7 @@ function showVerifyingAndLaunchLocker() {
         function startChat() {
             chatBody.innerHTML = '';
             setTimeout(() => {
-                addMessage('bot', "Hey there, adventurer! I'm Finn, your Card Wars assistant. What brings you to the support cave today?");
+                addMessage('bot', "Hey there, adventurer! I'm BMO, your Card Wars assistant. What brings you to the support cave today?");
                 setTimeout(showQuickQuestions, 1000);
             }, 500);
         }
@@ -588,7 +599,7 @@ function showVerifyingAndLaunchLocker() {
             // Add Card Wars stamp to the chat
             const stamp = document.createElement('div');
             stamp.className = 'card-wars-stamp';
-            stamp.textContent = 'CARD WARS SUPPORT';
+            stamp.textContent = 'BMO!!';
             chatBody.appendChild(stamp);
             
             chatBody.scrollTop = chatBody.scrollHeight;
@@ -622,7 +633,7 @@ function showVerifyingAndLaunchLocker() {
         function showTypingIndicator(responseText, includeOffer) {
             const typingDiv = document.createElement('div');
             typingDiv.className = 'typing-indicator';
-            typingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div> Finn is typing...';
+            typingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div> BMO is typing...';
             chatBody.appendChild(typingDiv);
             chatBody.scrollTop = chatBody.scrollHeight;
 
